@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Awais Muzaffar</title>
+        <style>
+            
+            * {
+                padding: 0;
+                margin: 0;
+            }
+            
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+        
+            #products {
+             
+                width: 960px;
+                margin: 0 auto;
+            }
+            
+            #products .row {
+                clear: both;
+                overflow: auto;
+                padding: 15px;
+                background-color: #f1f1f1;
+            }
+            
+            #products .row.highlight {
+                background-color: #e3e3e3;    
+            }
+            
+            #products .row .cell {
+                float: left;
+                width: 33%;
+                font-size: 18px;
+                color: #364151;
+            }
+            
+            #products .row .cell.price {
+                font-weight: bold;    
+            }
+            
+        </style>
+    </head>
+    <body>
+        <div id="products"></div>
+    </body>
+    <script>
+        
+        var productData = '[{"id":1,"name":"Retro","price":10,"color":"blue"},{"id":2,"name":"Designer","price":12,"color":"red"},{"id":3,"name":"Classic","price":14,"color":"yellow"},{"id":1,"name":"Retro","price":10,"color":"blue"},{"id":4,"name":"Rimless","price":14,"color":"purple"},{"id":5,"name":"Glam & Sparkle","price":8,"color":"grey"}]';
+        var productDataArr = JSON.parse(productData);
+        var filteredProductDataArr = filterByID(productDataArr);
+        var productsHTML = createProductsStr(filteredProductDataArr)
+        var productsDiv = document.getElementById('products');
+        
+        productsDiv.innerHTML = productsHTML;
+        
+        function filterByID(productArr) {
+            var seenIds = [];
+            var out = [];
+            for (var i = 0; i < productArr.length; i++) {
+                var id = productArr[i].id;
+                if (seenIds.indexOf(id) == -1) {
+                    seenIds.push(id);
+                    out.push(productArr[i]);
+                }
+            }
+            return out;
+        }
+        
+        function createProductsStr(productArr) {
+            var rows = '';
+            var currency = '&pound;';
+            for (var i = 0; i < productArr.length; i++) {
+                var id = productArr[i].id, name = productArr[i].name, price = productArr[i].price, color = productArr[i].color;
+                var cells = [
+                    '<div class="cell price">' + currency + price + '</div>',
+                    '<div class="cell name">' + name + '</div>',
+                    '<div class="cell color">' + capitalise(color) + '</div>'
+                ].join('');
+                var className = (i % 2) ? 'highlight' : '';
+                rows += '<div class="row ' + className + '">' + cells + '</div>'
+            }
+            return rows;
+        }
+        
+        function capitalise(text) {
+            return text.charAt(0).toUpperCase() + text.slice(1, text.length);
+        }
+        
+    </script>
+</html> 
